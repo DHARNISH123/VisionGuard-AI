@@ -10,12 +10,16 @@ class WebSocketService {
   connect(onMessage) {
     this.onMessageCallback = onMessage;
     
-    // Resolve protocol and host
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    // For local dev where vite proxies, we can connect directly to local ws or proxy
-    // Vite proxy handles '/ws' -> localhost:8000
-    this.url = `${protocol}//${host}/ws`;
+    const apiUrl = import.meta.env.VITE_API_URL;
+    if (apiUrl) {
+      const wsProto = apiUrl.startsWith('https:') ? 'wss:' : 'ws:';
+      const wsHost = apiUrl.replace(/^https?:\/\//, '');
+      this.url = `${wsProto}//${wsHost.replace(/\/$/, '')}/ws`;
+    } else {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      this.url = `${protocol}//${host}/ws`;
+    }
 
     console.log(`Connecting to WebSocket at ${this.url}`);
     

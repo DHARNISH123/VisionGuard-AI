@@ -1,3 +1,9 @@
+const formatUrl = (url) => {
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  const base = import.meta.env.VITE_API_URL || '';
+  return `${base}${url}`;
+};
+
 const getAuthHeader = () => {
   const token = localStorage.getItem('token');
   return token ? { 'Authorization': `Bearer ${token}` } : {};
@@ -5,7 +11,7 @@ const getAuthHeader = () => {
 
 export const api = {
   async get(url) {
-    const res = await fetch(url, {
+    const res = await fetch(formatUrl(url), {
       headers: {
         ...getAuthHeader()
       }
@@ -27,7 +33,7 @@ export const api = {
       headers['Content-Type'] = 'application/json';
     }
 
-    const res = await fetch(url, {
+    const res = await fetch(formatUrl(url), {
       method: 'POST',
       headers,
       body: isJson ? JSON.stringify(body) : body
@@ -44,7 +50,7 @@ export const api = {
   },
 
   async put(url, body) {
-    const res = await fetch(url, {
+    const res = await fetch(formatUrl(url), {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +70,7 @@ export const api = {
   },
 
   async delete(url) {
-    const res = await fetch(url, {
+    const res = await fetch(formatUrl(url), {
       method: 'DELETE',
       headers: {
         ...getAuthHeader()

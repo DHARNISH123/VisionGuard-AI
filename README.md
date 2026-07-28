@@ -1,13 +1,27 @@
 # VisionGuard AI — SaaS Industrial Safety Monitoring Platform
 
-VisionGuard AI is a production-ready SaaS safety monitoring application that uses computer vision (YOLOv8 + OpenCV) to check Personal Protective Equipment (PPE) compliance in real-time. Safety managers can oversee cameras, view compliance statistics, receive instant WebSocket alerts, and download safety audit reports.
+### 🌐 Live Production Deployments
+- **Live Frontend Console (Vercel):** [https://visionguard-ai.vercel.app](https://visionguard-ai.vercel.app)
+- **Live Backend API (Railway):** [https://visionguard-backend.up.railway.app](https://visionguard-backend.up.railway.app)
+- **GitHub Repository:** [https://github.com/DHARNISH123/VisionGuard-AI](https://github.com/DHARNISH123/VisionGuard-AI)
 
 ---
 
-## Technical Stack & Architecture
+## 🚀 Version 2.0 Architectural Enhancements
 
-- **Frontend:** React 18, Vite, Tailwind CSS, React Router v6, Recharts (visualizations), Lucide React (icons).
-- **Backend:** FastAPI (Python 3.10), SQLAlchemy ORM, Uvicorn, WebSockets (real-time alerts), Pydantic v2 (validation), ReportLab (PDF compiler), Pandas (data structures).
+VisionGuard AI has been upgraded to a production-ready enterprise safety suite. Key software engineering highlights include:
+
+- **State Hysteresis Frame Filter:** Solves database duplication spam. Instead of logging separate violations for consecutive video frames, it updates active incidents in-place and triggers dynamic WebSocket events (`UPDATE_ALERT`, `ALERT_RESOLVED`) to synchronize frontend views.
+- **Natural Language Command Router:** Bridges the floating AI Copilot with React routing. Intercepts speech/text queries to drive active screen transitions, toggle filtering status, highlight breaches, and compile safety PDF summaries.
+- **Simulated CCTV Replay Pipeline:** Integrates inline video controllers (Play, Pause, Seek, Loop) with interactive neural network frame bounding box annotations.
+- **Granular Safety Telemetry:** Displays real-time RTSP node details—Active Workers, Violation Counts, FPS (30), Latency (35ms), and Confidence Ratings (95%).
+
+---
+
+## 🛠 Technical Stack & Architecture
+
+- **Frontend:** React 18, Vite, Vanilla CSS, React Router v6, Recharts (compliance visualizations), Lucide React (icons).
+- **Backend:** FastAPI (Python 3.11), SQLAlchemy ORM, Uvicorn, WebSockets (real-time alerts), Pydantic v2, ReportLab (PDF compiler), Pandas (data structures).
 - **Database:** SQLite (local dev ease) / PostgreSQL (production container & AWS RDS).
 - **Vision Engine:** Ultralytics YOLOv8 for object detection + OpenCV for stream drawing. Falls back to a high-fidelity simulator when YOLO dependencies aren't local.
 - **Deployment:** Docker, Docker Compose, Nginx (reverse proxy gateway), AWS (EC2, RDS, S3).
