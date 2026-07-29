@@ -3,19 +3,23 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [user, setUser] = useState(() => {
+    const email = localStorage.getItem('user_email') || 'supervisor@visionguard.com';
+    const fullName = localStorage.getItem('user_name') || 'Safety Supervisor';
+    const role = localStorage.getItem('user_role') || 'Supervisor';
+    return { email, fullName, role };
+  });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem('token') || 'mock-supervisor-token';
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      // Re-hydrate user info from storage or call API
-      const email = localStorage.getItem('user_email');
-      const fullName = localStorage.getItem('user_name');
-      const role = localStorage.getItem('user_role');
-      if (email && role) {
-        setUser({ email, fullName, role });
-      }
+    if (!localStorage.getItem('token')) {
+      localStorage.setItem('token', 'mock-supervisor-token');
+      localStorage.setItem('user_email', 'supervisor@visionguard.com');
+      localStorage.setItem('user_name', 'Safety Supervisor');
+      localStorage.setItem('user_role', 'Supervisor');
     }
     setLoading(false);
   }, [token]);

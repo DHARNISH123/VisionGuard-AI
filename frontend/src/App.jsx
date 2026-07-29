@@ -24,7 +24,7 @@ function AppRoutes() {
       {/* Public Pages */}
       <Route 
         path="/landing" 
-        element={user ? <Navigate to="/" replace /> : <Landing />} 
+        element={<Navigate to="/" replace />} 
       />
       <Route 
         path="/login" 
@@ -113,10 +113,10 @@ function AppRoutes() {
         } 
       />
 
-      {/* Catch-all Routing redirects to Landing or Dashboard depending on Session */}
+      {/* Catch-all Routing redirects to Dashboard */}
       <Route 
         path="*" 
-        element={user ? <Navigate to="/" replace /> : <Navigate to="/landing" replace />} 
+        element={<Navigate to="/" replace />} 
       />
     </Routes>
   );
