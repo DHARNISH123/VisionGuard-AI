@@ -14,10 +14,10 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///C:/Users/Dharnish/.gemini/antigravity/scratch/visionguard-ai/backend/visionguard.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./visionguard.db")
     
     # Uploads & Snapshots
-    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "C:/Users/Dharnish/.gemini/antigravity/scratch/visionguard-ai/backend/uploads")
+    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "./uploads")
     
     # AWS configuration (for S3 storage, etc.)
     AWS_ACCESS_KEY_ID: str = os.getenv("AWS_ACCESS_KEY_ID", "")
@@ -25,11 +25,16 @@ class Settings(BaseSettings):
     AWS_S3_BUCKET: str = os.getenv("AWS_S3_BUCKET", "")
     
     BACKEND_CORS_ORIGINS: List[str] = [
-        origin.strip() for origin in os.getenv(
-            "CORS_ORIGINS",
-            "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000,https://visionguard-ai.vercel.app"
-        ).split(",")
-    ]
+    origin.strip() for origin in os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:5173,"
+        "http://localhost:3000,"
+        "http://127.0.0.1:5173,"
+        "http://127.0.0.1:3000,"
+        "https://visionguard-ai.vercel.app,"
+        "https://visionguardai-five.vercel.app"
+    ).split(",")
+]
 
     class Config:
         case_sensitive = True
