@@ -1,7 +1,7 @@
 # VisionGuard AI — SaaS Industrial Safety Monitoring Platform
 
 ### 🌐 Live Production Deployments
-- **Live Frontend Console (Vercel):** visionguard-r1xeaxng9-dharnidharni2356-6223s-projects.vercel.app
+- **Live Frontend Console (Vercel):** [https://visionguardai-five.vercel.app](https://visionguardai-five.vercel.app/)
 - **GitHub Repository:** [https://github.com/DHARNISH123/VisionGuard-AI](https://github.com/DHARNISH123/VisionGuard-AI)
 
 ---
