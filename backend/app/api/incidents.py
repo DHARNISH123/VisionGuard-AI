@@ -120,23 +120,12 @@ def get_incident_stats(db: Session = Depends(get_db)):
 @router.get("/snapshots/{filename}")
 def get_snapshot_image(filename: str):
     """
-    Returns the target incident image snapshot, falling back to a custom solid color canvas
-    if the physical file was deleted or is not found.
+    Returns the target incident image snapshot. Raises 404 if the file is not found.
     """
     file_path = os.path.join(settings.UPLOAD_DIR, filename)
-    if os.path.exists(file_path):
-        return FileResponse(file_path)
+    if not os.path.exists(file_path):
+        import logging
+        logging.error(f"Snapshot file not found: {file_path}")
+        raise HTTPException(status_code=404, detail="Snapshot file not found")
         
-    # Return a fallback image (solid dark grey canvas with a red border indicating missing snapshot)
-    import cv2
-    import numpy as np
-    
-    fallback_img = np.zeros((480, 640, 3), dtype=np.uint8)
-    fallback_img[:] = (35, 30, 28)
-    cv2.rectangle(fallback_img, (0, 0), (640, 480), (0, 0, 180), 10)
-    cv2.putText(fallback_img, "SNAPSHOT MISSING OR ARCHIVED", (100, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 200), 2)
-    
-    # Save the fallback image to temp and serve
-    temp_fallback_path = os.path.join(settings.UPLOAD_DIR, "fallback_temp.jpg")
-    cv2.imwrite(temp_fallback_path, fallback_img)
-    return FileResponse(temp_fallback_path)
+    return FileResponse(file_path, media_type="image/jpeg")

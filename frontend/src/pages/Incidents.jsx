@@ -43,6 +43,18 @@ export default function Incidents() {
   // Modal states
   const [selectedIncident, setSelectedIncident] = useState(null);
   const [modalTab, setModalTab] = useState('data'); // data | explain
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [selectedIncident]);
+
+  const getSnapshotUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    const base = import.meta.env.VITE_API_URL || '';
+    return `${base}${path}`;
+  };
 
   const fetchInitialData = async () => {
     try {
@@ -183,7 +195,7 @@ export default function Incidents() {
           
           <div className="flex gap-2">
             <a 
-              href={selectedIncident.snapshot_url} 
+              href={getSnapshotUrl(selectedIncident.snapshot_url)} 
               download={`evidence_${selectedIncident.id}.jpg`}
               className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-slate-100 rounded-lg px-3 py-1.5 text-xs font-bold transition shadow-sm active:scale-95 border border-slate-800"
             >
@@ -203,11 +215,23 @@ export default function Incidents() {
             {/* Left Side: Frame snapshot / annotated image */}
             <div className="lg:col-span-2 space-y-4">
               <div className="bg-slate-950 rounded-2xl border border-slate-850 overflow-hidden aspect-video flex items-center justify-center relative shadow-inner">
-                <img 
-                  src={selectedIncident.snapshot_url} 
-                  alt="PPE Breaches bounding box annotations" 
-                  className="w-full h-full object-contain"
-                />
+                {imageError || !selectedIncident.snapshot_url ? (
+                  <div className="flex flex-col items-center justify-center p-6 text-center text-slate-400">
+                    <AlertTriangle className="h-12 w-12 text-red-500 mb-3 animate-pulse" />
+                    <p className="font-bold text-sm text-slate-200">Snapshot Not Available</p>
+                    <p className="text-[11px] text-slate-500 mt-1 max-w-md">The physical frame snapshot was archived or is temporarily missing from the edge server.</p>
+                  </div>
+                ) : (
+                  <img 
+                    src={getSnapshotUrl(selectedIncident.snapshot_url)} 
+                    alt="PPE Breaches bounding box annotations" 
+                    className="w-full h-full object-contain"
+                    onError={() => {
+                      console.error("Failed to load snapshot:", getSnapshotUrl(selectedIncident.snapshot_url));
+                      setImageError(true);
+                    }}
+                  />
+                )}
               </div>
 
               {/* CCTV Replay Simulation (Version 2.0 Feature) */}
